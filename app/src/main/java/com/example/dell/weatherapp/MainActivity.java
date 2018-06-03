@@ -17,51 +17,25 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+    private String mLocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.w(LOG_TAG,"onCreate called");
+        Log.w(LOG_TAG, "onCreate called");
+
+        mLocation = Utility.getPreferredLocation(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        getSupportActionBar().setElevation(0f);
+//        if (savedInstanceState == null) {
+//            getSupportFragmentManager().beginTransaction()
+//                    .add(R.id.frame2, new ForecastFragment(), FORECASTFRAGMENT_TAG)
+//                    .commit();
+//        }
     }
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        Log.w(LOG_TAG,"onPause called");
-    }
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        Log.w(LOG_TAG,"onResume called");
-    }
-    public void onStart()
-    {
-        super.onStart();
-        Log.w(LOG_TAG,"onStart called");
-    }
-    public void onStop()
-    {
-        super.onStop();
-        Log.w(LOG_TAG,"onStop called");
-    }
-    public void onDestroy()
-    {
-        super.onDestroy();
-        Log.w(LOG_TAG,"onDestroy called");
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -91,12 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void openPreferredLocationInmap()
     {
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String location = sharedPrefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default_value));
-
-        // Using the URI scheme for showing a location found on a map.  This super-handy
-        // intent can is detailed in the "Common Intents" page of Android's developer site:
-        // http://developer.android.com/guide/components/intents-common.html#Maps
+        String location = Utility.getPreferredLocation(this);
 
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
                 .appendQueryParameter("q", location)
@@ -109,6 +78,19 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
              }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String location = Utility.getPreferredLocation( this );
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.frame2);
+            if ( null != ff ) {
+                ff.onLocationChanged();
+            }
+            mLocation = location;
+        }
     }
 }
 

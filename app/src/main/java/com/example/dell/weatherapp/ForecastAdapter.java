@@ -36,7 +36,7 @@ public class ForecastAdapter extends CursorAdapter {
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
-    private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
+    private final String LOG_TAG = ForecastAdapter.class.getSimpleName();
     /**
      * A utility function to Prepare the weather high/lows for presentation.
      */

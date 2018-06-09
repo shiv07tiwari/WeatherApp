@@ -1,5 +1,7 @@
 package com.example.dell.weatherapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +27,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.dell.weatherapp.data.WeatherContract;
+import com.example.dell.weatherapp.service.WeatherService;
+import com.example.dell.weatherapp.sync.WeatherSyncAdapter;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -129,9 +134,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void UpdateWeather(){
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
-        String location = Utility.getPreferredLocation(getActivity());
-        weatherTask.execute(location);
+
+//        AlarmManager am=(AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent alarmIntent = new Intent(getActivity(), WeatherService.AlarmReceiver.class);
+//
+//        alarmIntent.putExtra(WeatherService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
+//        //Wrap in a pending intent which only fires once.
+//        PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0,alarmIntent,PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
+//        //Set the AlarmManager to wake up the system.
+//
+//        am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
+         WeatherSyncAdapter.syncImmediately(getActivity());
     }
     void onLocationChanged( ) {
         UpdateWeather();

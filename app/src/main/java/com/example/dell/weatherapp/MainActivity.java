@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.dell.weatherapp.sync.WeatherSyncAdapter;
+
 public class MainActivity extends AppCompatActivity {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName();
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 //                    .add(R.id.frame2, new ForecastFragment(), FORECASTFRAGMENT_TAG)
 //                    .commit();
 //        }
+        WeatherSyncAdapter.initializeSyncAdapter(this);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

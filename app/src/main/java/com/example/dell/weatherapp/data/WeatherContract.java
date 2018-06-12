@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.example.dell.weatherapp.DetailFragment;
 
 
 /**
@@ -21,6 +22,7 @@ public class WeatherContract {
     // content authority is the package name for the app, which is guaranteed to be unique on the
     // device.
     public static final String CONTENT_AUTHORITY = "com.example.dell.weatherapp";
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
     // Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
     // the content provider.
@@ -132,17 +134,22 @@ public class WeatherContract {
          */
         public static Uri buildWeatherLocation(String locationSetting) {
 
+            Log.e(LOG_TAG,"Location : "+ CONTENT_URI.buildUpon().appendPath(locationSetting).build());
             return CONTENT_URI.buildUpon().appendPath(locationSetting).build();
         }
 
         public static Uri buildWeatherLocationWithStartDate(
                 String locationSetting, long startDate) {
             long normalizedDate = normalizeDate(startDate);
+            Log.e(LOG_TAG,"Start Date : "+ CONTENT_URI.buildUpon().appendPath(locationSetting)
+                    .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build());
             return CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendQueryParameter(COLUMN_DATE, Long.toString(normalizedDate)).build();
         }
 
         public static Uri buildWeatherLocationWithDate(String locationSetting, long date) {
+            Log.e(LOG_TAG,"Date : "+ CONTENT_URI.buildUpon().appendPath(locationSetting)
+                    .appendPath(Long.toString(normalizeDate(date))).build());
             return CONTENT_URI.buildUpon().appendPath(locationSetting)
                     .appendPath(Long.toString(normalizeDate(date))).build();
         }

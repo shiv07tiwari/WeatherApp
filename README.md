@@ -1,2 +1,2 @@
 # WeatherApp
-Weather App while learning from Udacity.
+Weather App while learning from Udacity
